@@ -10,10 +10,6 @@ import mysql.connector
 import sys
 import argparse
 
-# http://stackoverflow.com/a/31137935/5415895
-#reload(sys)
-#sys.setdefaultencoding('utf-8')
-
 config = {
   'user': 'root',
   'password': 'apple',
