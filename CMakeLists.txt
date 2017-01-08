@@ -15,3 +15,5 @@ include_directories(${PROJECT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/braino)
+
+file(COPY cmake/braino.sh DESTINATION ${PROJECT_BINARY_DIR})
