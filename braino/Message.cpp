@@ -21,17 +21,21 @@ Message::Message(std::string message):
 	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-complete-example-1.html
 	sql::mysql::MySQL_Driver* driver = NULL;
 	sql::Connection* con = NULL;
-	sql::Statement* stmt = NULL;
+	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-prepared-statements.html
+	sql::PreparedStatement* prep_stmt = NULL;
 	sql::ResultSet *res = NULL;
 	
 	driver = sql::mysql::get_mysql_driver_instance();
 	con = driver->connect("tcp://127.0.0.1:3306", "root", "apple");
 	con->setSchema("braino");
 
-	// pls dont sql inject.
-	std::string query = "SELECT `response` FROM `responses` WHERE (SELECT `parent` FROM `phrases` WHERE `phrase` LIKE \"" + message + "\")";
-	stmt = con->createStatement();
-  	res = stmt->executeQuery(query);
+	std::string query = "SELECT `response` FROM `responses` WHERE (SELECT `parent` FROM `phrases` WHERE `phrase` LIKE (?))";
+	// Create prepared statement.
+	prep_stmt = con->prepareStatement(query);
+	// Set variables.
+	prep_stmt->setString(1, message);
+	// Execute statement.
+  	res = prep_stmt->executeQuery();
 
 	while (res->next())
 	{
@@ -40,7 +44,7 @@ Message::Message(std::string message):
 	}
 
 	delete res;
-	delete stmt;
+	delete prep_stmt;
 	delete con;
 }
 
@@ -53,9 +57,11 @@ std::string Message::respond()
 	if (replies.empty())
 		return "I don't understand.";
 
+	// Seed the random thing.
 	srand(time(NULL));
+	// Get a random position in the replies vector.
 	int rank = rand() % replies.size();
 	return replies[rank];
 }
 
-}
+} // !braino
