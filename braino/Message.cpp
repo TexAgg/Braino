@@ -44,18 +44,22 @@ void Message::get_replies()
 	// Select the database to use.
 	con->setSchema("braino");
 
-	std::string query = "SELECT `response` FROM `responses` WHERE (SELECT `parent` FROM `phrases` WHERE `phrase` LIKE (?))";
+	std::string query = "SELECT `response` FROM `responses` WHERE `parent` IN (SELECT `id` FROM `phrases` WHERE `phrase` LIKE (?))";
 	// Create prepared statement.
 	prep_stmt = con->prepareStatement(query);
 	// Set variables.
-	prep_stmt->setString(1, message);
+	std::string phrase = "%" + message + "%";
+	prep_stmt->setString(1, phrase);
 	// Execute statement.
   	res = prep_stmt->executeQuery();
 
 	while (res->next())
 	{
 		// http://stackoverflow.com/a/31135869/5415895
-		replies.push_back(res->getString("response").c_str());
+		std::string response = res->getString("response").c_str();
+		// No empty strings in the response.
+		if (!response.empty())
+			replies.push_back(response);
 	}
 
 	delete res;
@@ -73,6 +77,11 @@ std::string Message::respond()
 	// Get a random position in the replies vector.
 	int rank = rand() % replies.size();
 	return replies[rank];
+}
+
+std::string Message::get_message()
+{
+	return message;
 }
 
 } // !braino

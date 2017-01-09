@@ -27,6 +27,9 @@ public:
 	
 	// Return a random response from the replies vector.
 	std::string respond();
+
+	// Getter function for message;
+	std::string get_message();
 	
 }; // !Message
 
