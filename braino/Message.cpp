@@ -32,6 +32,7 @@ Message::Message(std::string message):
 	
 	driver = sql::mysql::get_mysql_driver_instance();
 	con = driver->connect("tcp://127.0.0.1:3306", "root", "apple");
+	// Select the database to use.
 	con->setSchema("braino");
 
 	std::string query = "SELECT `response` FROM `responses` WHERE (SELECT `parent` FROM `phrases` WHERE `phrase` LIKE (?))";

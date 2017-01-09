@@ -7,6 +7,10 @@
 namespace braino
 {
 
+/*
+	Class for the chat to a log file.
+	The file is overwritten each time.
+*/
 class Logger
 {
 	std::ofstream outfile;
