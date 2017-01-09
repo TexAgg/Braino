@@ -1,6 +1,5 @@
 _build/
 
 data/*
-!data/extract.py
 
 *.pyc
