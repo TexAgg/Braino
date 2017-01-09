@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
-
+#include <boost/algorithm/string.hpp>
 #include <mysql_driver.h>
 #include <mysql_connection.h>
 #include <cppconn/driver.h>
@@ -18,6 +18,11 @@ namespace braino
 Message::Message(std::string message):
 	message(message)
 {
+	// Trim leading and trailing whitespace.
+	boost::trim(message);
+	if (message.size() > DB_STRING_LENGTH)
+		message.resize(DB_STRING_LENGTH);
+
 	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-complete-example-1.html
 	sql::mysql::MySQL_Driver* driver = NULL;
 	sql::Connection* con = NULL;

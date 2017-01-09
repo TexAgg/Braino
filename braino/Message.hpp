@@ -7,6 +7,9 @@
 namespace braino
 {
 
+// I used VARCHAR(191) in the database.
+const int DB_STRING_LENGTH = 191;
+
 class Message
 {
 	// The message that was sent.

@@ -1,3 +1,5 @@
+# https://github.com/krofna/Warrior-of-Dreamworld-r3/blob/master/Build/Modules/FindMySQLConnectorCPP.cmake
+
 # - Try to find Mysql-Connector-C++
 # Once done, this will define
 #

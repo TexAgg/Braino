@@ -14,6 +14,9 @@ include_directories(${PROJECT_SOURCE_DIR})
 # https://cmake.org/Wiki/CMake:How_To_Find_Libraries#Using_external_libraries_that_CMake_doesn.27t_yet_have_modules_for
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
+find_package(Boost 1.58 REQUIRED)
+find_package(MySQLConnectorCPP REQUIRED)
+
 add_subdirectory(${PROJECT_SOURCE_DIR}/braino)
 
 file(COPY cmake/braino.sh DESTINATION ${PROJECT_BINARY_DIR})
