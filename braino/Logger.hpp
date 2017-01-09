@@ -14,6 +14,8 @@ class Logger
 public:
 	Logger(std::string filename);
 	~Logger();
+
+	void write_entry(std::string sender, std::string message);
 	
 };
 
