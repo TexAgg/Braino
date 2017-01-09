@@ -22,7 +22,16 @@ Message::Message(std::string message):
 	boost::trim(message);
 	if (message.size() > DB_STRING_LENGTH)
 		message.resize(DB_STRING_LENGTH);
+	
+	get_replies();
+}
 
+Message::~Message()
+{
+}
+
+void Message::get_replies()
+{
 	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-complete-example-1.html
 	sql::mysql::MySQL_Driver* driver = NULL;
 	sql::Connection* con = NULL;
@@ -52,10 +61,6 @@ Message::Message(std::string message):
 	delete res;
 	delete prep_stmt;
 	delete con;
-}
-
-Message::~Message()
-{
 }
 
 std::string Message::respond()

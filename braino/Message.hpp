@@ -17,6 +17,9 @@ class Message
 	// A vector of replies, retrieved from the database.
 	std::vector<std::string> replies;
 
+	// Populate the replies vector.
+	void get_replies();
+
 public:
 	// Pass to the constructor the message you want to send.
 	Message(std::string message);
