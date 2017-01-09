@@ -8,3 +8,4 @@ Unfortunately, because of group chats and double-messaging, many of his replies 
 
 ## Dependencies
 * [MySQLConnector-C++](http://dev.mysql.com/doc/connector-cpp/en/)
+* Boost
