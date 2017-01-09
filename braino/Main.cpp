@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include "Message.hpp"
+#include "Logger.hpp"
 
 int main()
 {
