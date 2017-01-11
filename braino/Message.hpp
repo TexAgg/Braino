@@ -19,6 +19,8 @@ class Message
 
 	// Populate the replies vector.
 	void get_replies();
+	// Strip whitespace and resize the message if needed.
+	void clean_message();
 
 public:
 	// Pass to the constructor the message you want to send.

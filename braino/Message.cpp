@@ -1,8 +1,4 @@
 #include "Message.hpp"
-
-#include <iostream>
-#include <stdlib.h>
-#include <time.h>
 #include <boost/algorithm/string.hpp>
 #include <mysql_driver.h>
 #include <mysql_connection.h>
@@ -15,14 +11,9 @@
 namespace braino
 {
 
-Message::Message(std::string message):
-	message(message)
+Message::Message(std::string message): message(message)
 {
-	// Trim leading and trailing whitespace.
-	boost::trim(message);
-	if (message.size() > DB_STRING_LENGTH)
-		message.resize(DB_STRING_LENGTH);
-	
+	clean_message();
 	get_replies();
 }
 
@@ -32,6 +23,9 @@ Message::~Message()
 
 void Message::get_replies()
 {
+	// Reset the replies.
+	replies.clear();
+	
 	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-complete-example-1.html
 	sql::mysql::MySQL_Driver* driver = NULL;
 	sql::Connection* con = NULL;
@@ -77,6 +71,15 @@ std::string Message::respond()
 	// Get a random position in the replies vector.
 	int rank = rand() % replies.size();
 	return replies[rank];
+}
+
+void Message::clean_message()
+{
+	// Trim leading and trailing whitespace.
+	boost::trim(message);
+	// Fit the message to database specifications.
+	if (message.size() > DB_STRING_LENGTH)
+		message.resize(DB_STRING_LENGTH);
 }
 
 std::string Message::get_message()

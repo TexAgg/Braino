@@ -1,2 +1,2 @@
 # https://github.com/github/linguist#using-gitattributes
-cmake/Modules/* linguist-vendored
+cmake/Modules/* linguist-vendored=true
