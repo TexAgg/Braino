@@ -1,9 +1,5 @@
 #include "Message.hpp"
-#include <memory>
 #include <boost/algorithm/string.hpp>
-#include <mysql_driver.h>
-#include <mysql_connection.h>
-#include <cppconn/driver.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
@@ -14,6 +10,11 @@ namespace braino
 
 Message::Message(std::string message): message(message)
 {
+	driver = sql::mysql::get_mysql_driver_instance();
+	con.reset(driver->connect("tcp://127.0.0.1:3306", "root", "apple"));
+	// Select the database to use.
+	con->setSchema("braino");	
+	
 	clean_message();
 	get_replies();
 }
@@ -27,18 +28,9 @@ void Message::get_replies()
 	// Reset the replies vector.
 	replies.clear();
 	
-	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-complete-example-1.html
-	// Garbage collection for driver is handled by con, no need for unique_ptr.
-	sql::mysql::MySQL_Driver* driver = NULL;
-	std::unique_ptr<sql::Connection> con;
 	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-prepared-statements.html
 	std::unique_ptr<sql::PreparedStatement> prep_stmt;
 	std::unique_ptr<sql::ResultSet> res;
-	
-	driver = sql::mysql::get_mysql_driver_instance();
-	con.reset(driver->connect("tcp://127.0.0.1:3306", "root", "apple"));
-	// Select the database to use.
-	con->setSchema("braino");
 
 	std::string query = "SELECT `response` FROM `responses` WHERE `parent` IN (SELECT `id` FROM `phrases` WHERE `phrase` LIKE (?))";
 	// Create prepared statement.

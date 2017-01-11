@@ -3,6 +3,10 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+#include <mysql_driver.h>
+#include <mysql_connection.h>
+#include <cppconn/driver.h>
 
 namespace braino
 {
@@ -12,6 +16,11 @@ const int DB_STRING_LENGTH = 191;
 
 class Message
 {
+	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-complete-example-1.html
+	// Garbage collection for driver is handled by con, no need for unique_ptr.
+	sql::mysql::MySQL_Driver* driver = NULL;
+	std::unique_ptr<sql::Connection> con;	
+	
 	// The message that was sent.
 	std::string message;
 	// A vector of replies, retrieved from the database.
