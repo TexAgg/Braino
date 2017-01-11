@@ -1,4 +1,5 @@
 #include "Message.hpp"
+#include <memory>
 #include <boost/algorithm/string.hpp>
 #include <mysql_driver.h>
 #include <mysql_connection.h>
@@ -27,25 +28,26 @@ void Message::get_replies()
 	replies.clear();
 	
 	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-complete-example-1.html
+	// Garbage collection for driver is handled by con, no need for unique_ptr.
 	sql::mysql::MySQL_Driver* driver = NULL;
-	sql::Connection* con = NULL;
+	std::unique_ptr<sql::Connection> con;
 	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-prepared-statements.html
-	sql::PreparedStatement* prep_stmt = NULL;
-	sql::ResultSet *res = NULL;
+	std::unique_ptr<sql::PreparedStatement> prep_stmt;
+	std::unique_ptr<sql::ResultSet> res;
 	
 	driver = sql::mysql::get_mysql_driver_instance();
-	con = driver->connect("tcp://127.0.0.1:3306", "root", "apple");
+	con.reset(driver->connect("tcp://127.0.0.1:3306", "root", "apple"));
 	// Select the database to use.
 	con->setSchema("braino");
 
 	std::string query = "SELECT `response` FROM `responses` WHERE `parent` IN (SELECT `id` FROM `phrases` WHERE `phrase` LIKE (?))";
 	// Create prepared statement.
-	prep_stmt = con->prepareStatement(query);
+	prep_stmt.reset(con->prepareStatement(query));
 	// Set variables.
 	std::string phrase = "%" + message + "%";
 	prep_stmt->setString(1, phrase);
 	// Execute statement.
-  	res = prep_stmt->executeQuery();
+	  res.reset(prep_stmt->executeQuery());
 
 	while (res->next())
 	{
@@ -55,10 +57,6 @@ void Message::get_replies()
 		if (!response.empty())
 			replies.push_back(response);
 	}
-
-	delete res;
-	delete prep_stmt;
-	delete con;
 }
 
 std::string Message::respond()
