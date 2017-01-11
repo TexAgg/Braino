@@ -24,7 +24,7 @@ Message::~Message()
 
 void Message::get_replies()
 {
-	// Reset the replies.
+	// Reset the replies vector.
 	replies.clear();
 	
 	// http://dev.mysql.com/doc/connector-cpp/en/connector-cpp-examples-complete-example-1.html
@@ -78,6 +78,13 @@ void Message::clean_message()
 	// Fit the message to database specifications.
 	if (message.size() > DB_STRING_LENGTH)
 		message.resize(DB_STRING_LENGTH);
+}
+
+void Message::set_message(std::string new_message)
+{
+	message = new_message;
+	clean_message();
+	get_replies();
 }
 
 std::string Message::get_message()

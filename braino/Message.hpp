@@ -30,6 +30,8 @@ public:
 	// Return a random response from the replies vector.
 	std::string respond();
 
+	// Sets the current message for the object. This resets the replies vector.
+	void set_message(std::string new_message);
 	// Getter function for message;
 	std::string get_message();
 	// Return the size of the replies vector.
