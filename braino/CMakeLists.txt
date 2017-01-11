@@ -5,5 +5,3 @@ add_library(Logger Logger.cpp Logger.hpp)
 
 add_executable(Braino Main.cpp)
 target_link_libraries(Braino Message Logger ${MYSQLCONNECTORCPP_LIBRARY})
-
-# https://dev.mysql.com/doc/connector-cpp/en/connector-cpp-getting-started-examples.html
