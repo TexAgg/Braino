@@ -32,6 +32,8 @@ public:
 
 	// Getter function for message;
 	std::string get_message();
+	// Return the size of the replies vector.
+	int replies_size();
 	
 }; // !Message
 

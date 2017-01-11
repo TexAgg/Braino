@@ -47,7 +47,7 @@ void Message::get_replies()
 	std::string phrase = "%" + message + "%";
 	prep_stmt->setString(1, phrase);
 	// Execute statement.
-	  res.reset(prep_stmt->executeQuery());
+	res.reset(prep_stmt->executeQuery());
 
 	while (res->next())
 	{
@@ -83,6 +83,11 @@ void Message::clean_message()
 std::string Message::get_message()
 {
 	return message;
+}
+
+int Message::replies_size()
+{
+	return replies.size();
 }
 
 } // !braino
